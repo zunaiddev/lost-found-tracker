@@ -8,6 +8,8 @@ import {MatchesModule} from './matches/matches.module.js';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {JwtModule} from './jwt/jwt.module.js';
 import {GuardsModule} from './common/guards/guards.module.js';
+import {APP_GUARD} from "@nestjs/core";
+import {AuthGuard} from "./common/guards/auth.guard.js";
 
 @Module({
   imports: [
@@ -29,6 +31,6 @@ import {GuardsModule} from './common/guards/guards.module.js';
     GuardsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {provide: APP_GUARD, useClass: AuthGuard}],
 })
 export class AppModule {}

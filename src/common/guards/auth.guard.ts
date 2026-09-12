@@ -4,6 +4,8 @@ import {JwtService} from '../../jwt/jwt.service.js';
 import type {JwtPayload} from 'jsonwebtoken';
 import {UserEntity} from "../../users/entity/user.entity.js";
 import {UsersService} from "../../users/users.service.js";
+import {Reflector} from "@nestjs/core";
+import {IS_PUBLIC_KEY} from "../decorators/public.decorator.js";
 
 export interface AuthenticatedRequest extends Request {
   user: UserEntity;
@@ -11,11 +13,21 @@ export interface AuthenticatedRequest extends Request {
 }
 
 @Injectable()
-export class JwtGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService,
+export class AuthGuard implements CanActivate {
+  constructor(private readonly reflector: Reflector,
+              private readonly jwtService: JwtService,
               private readonly usersService: UsersService,) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic: boolean = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass()
+    ]);
+
+    if (isPublic) {
+      return true;
+    }
+
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<AuthenticatedRequest>();
 

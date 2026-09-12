@@ -3,7 +3,9 @@ import {AuthResDto} from "./dto/auth-res.dto.js";
 import {SignupReqDto} from "./dto/signup-req.dto.js";
 import {LoginReqDto} from "./dto/login-req.dto.js";
 import {AuthService} from "./auth.service.js";
+import {Public} from "../common/decorators/public.decorator.js";
 
+@Public()
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService){}
