@@ -5,9 +5,10 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import UserEntity from '../../users/entity/user.entity.js';
+import {UserEntity} from '../../users/entity/user.entity.js';
 
 export enum ReportType {
   LOST = 'LOST',
@@ -61,7 +62,7 @@ export class ReportEntity {
     nullable: true,
   })
   @JoinColumn({ name: 'user_id' })
-  user: UserEntity;
+  user: Relation<UserEntity>;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -69,5 +70,3 @@ export class ReportEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
-
-export default ReportEntity;

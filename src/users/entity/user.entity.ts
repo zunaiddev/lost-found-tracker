@@ -4,9 +4,10 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import ReportEntity from '../../reports/entity/report.entity.js';
+import {ReportEntity} from '../../reports/entity/report.entity.js';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -23,7 +24,7 @@ export class UserEntity {
   password: string;
 
   @OneToMany(() => ReportEntity, (report) => report.user)
-  reports: ReportEntity[];
+  reports: Relation<ReportEntity[]>;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -31,5 +32,3 @@ export class UserEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
-
-export default UserEntity;
