@@ -19,7 +19,7 @@ export class ReportsController {
 
     @Get()
     async getReports(@CurrentUser() currentUser: UserEntity): Promise<ReportResDto> {
-        return await this.reportService.getAllReports(currentUser);
+        return await this.reportService.getAllReportsByUser(currentUser);
     }
 
     @HttpCode(HttpStatus.NO_CONTENT)

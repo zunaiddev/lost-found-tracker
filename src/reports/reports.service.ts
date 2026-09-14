@@ -13,12 +13,20 @@ export class ReportsService {
     constructor(@InjectRepository(ReportEntity) private readonly reportRepo: Repository<ReportEntity>) {
     }
 
-    async getAllReports(currentUser: UserEntity): Promise<ReportResDto> {
+    async getAllReportsByUser(currentUser: UserEntity): Promise<ReportResDto> {
         const reports: ReportEntity[] = await this.reportRepo.findBy({
             user: {id: currentUser.id},
         });
         console.log(reports);
         return new ReportResDto(currentUser, reports);
+    }
+
+    async findReportByIdAndUser(id: number, user: UserEntity): Promise<ReportEntity> {
+        return await this.reportRepo.findOneByOrFail({id, user: {id: user.id}});
+    }
+
+    async findAllReports(): Promise<ReportEntity[]> {
+        return await this.reportRepo.find();
     }
 
     async saveReport(currentUser: UserEntity, reportAddReq: CreateReportReqDto): Promise<ReportDto> {
