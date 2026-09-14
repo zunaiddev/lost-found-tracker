@@ -46,21 +46,18 @@ export class ReportEntity {
   description: string;
 
   @Column({ nullable: true })
-  category: string;
+  category?: string;
 
   @Column()
   location: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  date: Date;
+  date?: Date;
 
   @Column({ name: 'image_url', nullable: true })
-  imageUrl: string;
+  imageUrl?: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.reports, {
-    onDelete: 'CASCADE',
-    nullable: true,
-  })
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'user_id' })
   user: Relation<UserEntity>;
 
