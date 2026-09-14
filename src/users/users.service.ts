@@ -1,7 +1,8 @@
-import {ConflictException, Injectable} from '@nestjs/common';
+import {ConflictException, Injectable, UnauthorizedException} from '@nestjs/common';
 import {Repository} from "typeorm";
 import {UserEntity} from "./entity/user.entity.js";
 import {InjectRepository} from "@nestjs/typeorm";
+import {UserDeleteReqDto} from "./dto/user-delete-req.dto.js";
 
 @Injectable()
 export class UsersService {
@@ -32,5 +33,13 @@ export class UsersService {
 
     async findById(userId: number): Promise<UserEntity | null> {
         return await this.userRepo.findOneBy({id: userId});
+    }
+
+    async deleteUser(currentUser: UserEntity, userDelReq: UserDeleteReqDto): Promise<void> {
+        if (currentUser.password !== userDelReq.password) {
+            throw new UnauthorizedException('Invalid password');
+        }
+
+        await this.userRepo.delete({id: currentUser.id});
     }
 }
